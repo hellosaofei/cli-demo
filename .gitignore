@@ -1,0 +1,6 @@
+# 模块内容
+node_modules
+
+package-lock.json
+# 其他
+/bin
