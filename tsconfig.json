@@ -5,7 +5,10 @@
     "outDir": "./bin",
     "target": "ES5",
     "paths": {
-      "@": ["./src"]
+      "@": ["./src"],
+      "@utils": ["./src/utils"],
+      "@commands": ["./src/commands"],
+      "@config": ["./src/config"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true

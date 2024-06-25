@@ -2,8 +2,8 @@
 
 import { Command } from "commander";
 import Pack from "../package.json";
-import inquirer from "inquirer";
-// import chalk from "chalk";
+
+import commands from "./commands";
 
 const program = new Command();
 program
@@ -11,44 +11,21 @@ program
   .version(Pack.version)
   .helpOption("-h,--help")
   .usage("<command> [option]");
-
-// 增加一个选择命令
-program.command("choose").action(() => {
-  inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "testChoose",
-        message: "please select",
-        choices: [
-          {
-            name: "hahahha",
-            value: 1,
-          },
-          {
-            name: "zhangsan",
-            value: 2,
-          },
-        ],
-      },
-    ])
-    .then((answer) => {
-      console.log(answer, "===answer");
-    })
-    .catch((error) => {
-      throw error;
+Object.keys(commands).forEach((currentCommandKey) => {
+  // 拿到当前命令的配置项对象
+  const currentCommandValue = commands[currentCommandKey];
+  // 注册当前命令并返回一个对象
+  const currentCommand = program.command(currentCommandKey);
+  if (currentCommandValue.option && currentCommandValue.option.length > 0) {
+    currentCommandValue.option.forEach((item) => {
+      currentCommand.option(item.cmd, item.msg || "");
     });
+  }
+  // 当前命令的描述信息
+  currentCommand.description(currentCommandValue.description);
+  // 当前命令的执行函数
+  currentCommand.action(currentCommandValue.action);
 });
-
-// 增加一个创建命令
-program
-  .command("create <project-name>")
-  .description("create a new project") // 添加描述信息
-  .option("-f, --force", "overwrite target directory if it exists") // 强制覆盖
-  .action((projectName, cmd) => {
-    // 处理用户输入create 指令附加的参数
-    console.log(projectName, cmd);
-  });
 
 // config 命令
 program
